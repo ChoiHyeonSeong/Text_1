@@ -1,16 +1,23 @@
-# This is a sample Python script.
+import os
+import math
+import random
+import pandas as pd
+import regex as re
+import numpy as np
+from typing import Optional, Sequence
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split, KFold
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support, roc_auc_score, f1_score
 
+from tqdm import tqdm
+import torch
+from torch import nn
+from torch import Tensor
+from torch.nn import functional as F
+from torch.optim.lr_scheduler import _LRScheduler
+from torch.utils.data import DataLoader, Dataset, random_split
+from transformers import Trainer, TrainingArguments, AutoModelForSequenceClassification, AutoTokenizer, EarlyStoppingCallback, AutoModel, AutoConfig
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+import gc
+os.environ["TOKENIZERS_PARALLELISM"] = "false"

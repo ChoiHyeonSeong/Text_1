@@ -22,3 +22,41 @@ from transformers import Trainer, TrainingArguments, AutoModelForSequenceClassif
 import gc
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
+train = pd.read_csv('data/train.csv')
+test = pd.read_csv('data/test.csv')
+
+
+
+'''
+기본 뼈대:
+class CustomDataset(torch.utils.data.Dataset): 
+  def __init__(self):
+
+  def __len__(self):
+
+  def __getitem__(self, idx):
+
+메서드 설명:
+__init__(self) : 필요한 변수들을 선언하는 메서드. input으로 오는 x와 y를 load 하거나, 파일목록을 load한다.
+__len__(self) : x나 y 는 길이를 넘겨주는 메서드.
+__getitem__(self, index) : index번째 데이터를 return 하는 메서드.
+
+'''
+class CustomDataset(torch.utils.data.Dataset):
+    def __init__(self, encodings, labels=None):
+        self.encodings = encodings
+        self.labels = labels
+
+    def __getitem__(self, idx):
+        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+        if self.labels:
+            st_type = self.labels['type'][idx]
+            st_polarity = self.labels['polarity'][idx]
+            st_tense = self.labels['tense'][idx]
+            st_certainty = self.labels['certainty'][idx]
+            item["labels"] = torch.tensor(st_type), torch.tensor(st_polarity), torch.tensor(st_tense), torch.tensor(
+                st_certainty)
+        return item
+
+    def __len__(self):
+        return len(self.encodings["input_ids"])
